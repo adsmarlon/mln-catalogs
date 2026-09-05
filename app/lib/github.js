@@ -192,8 +192,12 @@ export async function concluirConexao(token) {
   const login = await usuarioDoToken(token);
   const nome = NOME_REPO_PADRAO;
   const { criado } = await garantirRepo(token, login, nome);
-  await prepararRepoLocal();
   gravarAuth({ token, login, repo: nome, conectadoEm: new Date().toISOString() });
+  // adianta o clone local; se falhar (rede instável), nao impede a conexao —
+  // publicar() sincroniza de novo antes de cada publicacao.
+  try {
+    await sincronizarRepoLocal({ token, login, repo: nome });
+  } catch { /* segue conectado */ }
   return { login, repo: `${login}/${nome}`, criado };
 }
 
