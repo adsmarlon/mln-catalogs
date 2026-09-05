@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+build
+.env*.local
+.env
+.DS_Store
+*.log
+.vercel
+
+# dados locais do app (token do GitHub e clone das imagens)
+.mln/
